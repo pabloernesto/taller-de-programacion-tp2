@@ -32,6 +32,10 @@ int main(int argc, char **argv) {
      * options. */
     vector<struct command> commands;
     parseCommands(argc - optind, argv + optind, commands);
+
+    for (auto it = commands.begin(); it != commands.end(); it++) {
+        cout << (*it).operation << endl;
+    }
 }
 
 static void processOptions(int argc, char **argv) {
@@ -81,7 +85,6 @@ static void parseCommands(int argc, char **argv,
         struct command c = { *argv };
 
         if (c.operation == "echo") {
-            cout << "echo" << endl;
         } else if (c.operation == "match") {
             if (argc < 2) {
                 cerr << "Insufficient arguments for match: "
@@ -90,7 +93,6 @@ static void parseCommands(int argc, char **argv,
             }
             c.regex = *(++argv);
             argc--;
-            cout << c.regex << endl;
         } else if (c.operation == "replace") {
             if (argc < 3) {
                 cerr << "Insufficient arguments for replace: "
@@ -100,7 +102,6 @@ static void parseCommands(int argc, char **argv,
             c.regex = *(++argv);
             c.replacement = *(++argv);
             argc -= 2;
-            cout << "regex " << c.regex << " replace " << c.replacement << endl;
         } else {
             cerr << "Unrecognized command: " << c.operation << endl;
             exit(1);
@@ -116,5 +117,7 @@ static void parseCommands(int argc, char **argv,
                 exit(1);
             }
         }
+
+        output.push_back(c);
     }
 }
