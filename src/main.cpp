@@ -2,23 +2,39 @@
     #define _GNU_SOURCE
 #endif
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 int debug_mode = 0;
 
+struct command {
+    string operation;
+    union {
+        struct { char *regex; } match;
+        struct { char *regex; char *replacement; } replace;
+    } args;
+};
+
 static void processOptions(int argc, char **argv);
 static void printUsage();
+static void parseCommands(int argc, char **argv,
+                          vector<struct command> &output);
 
 int main(int argc, char **argv) {
     processOptions(argc, argv);
 
     /* optind is the index in argv of the first argv-element that is not
-     * an option */
-    //~ struct command *commands = parseCommands(argc - optind, argv + optind);
+     * an option. argc - optind is the number of elements in argv that are not
+     * options. */
+    vector<struct command> commands;
+    parseCommands(argc - optind, argv + optind, commands);
 
-    printf("debug mode: %s\n", debug_mode ? "ON" : "OFF");
+    cout << "debug mode: " << (debug_mode ? "ON" : "OFF") << endl;
 }
 
 static void processOptions(int argc, char **argv) {
@@ -39,12 +55,12 @@ static void processOptions(int argc, char **argv) {
             break;
         } else if (c == 'i') {
             if (freopen(optarg, "r", stdin) == NULL) {
-                fprintf(stderr, "Could not open %s", optarg);
+                cerr << "Could not open " << optarg << endl;
                 exit(1);
             }
         } else if (c == 'o') {
             if (freopen(optarg, "w", stdout) == NULL) {
-                fprintf(stderr, "Could not open %s", optarg);
+                cerr << "Could not open " << optarg << endl;
                 exit(1);
             }
         } else if (c == 'd') {
@@ -57,6 +73,36 @@ static void processOptions(int argc, char **argv) {
 }
 
 static void printUsage() {
-    printf("tp [--input filename] [--output filename] [--debug] "
-           "cmd [:: cmd]...\n");
+    cout << "tp [--input filename] [--output filename] [--debug] "
+            "cmd [:: cmd]..." << endl;
+}
+
+static void parseCommands(int argc, char **argv,
+                          vector<struct command> &output) {
+    for (; argc > 0; argc--, argv++) {
+        /* Note the implicit conversion from *char to string */
+        struct command c = { *argv };
+
+        if (c.operation == "echo") {
+            cout << "echo" << endl;
+        } else if (c.operation == "match") {
+            cout << "match" << endl;
+        } else if (c.operation == "replace") {
+            cout << "replace" << endl;
+        } else {
+            cerr << "Unrecognized command: " << c.operation << endl;
+            exit(1);
+        }
+
+        /* Handle :: */
+        if (argc > 1) {
+            argc--;
+            string s(*(++argv));
+            if (s != "::") {
+                cerr << "Missing '::' after " << c.operation
+                     << " terminating." << endl;
+                exit(1);
+            }
+        }
+    }
 }
