@@ -14,10 +14,8 @@ int debug_mode = 0;
 
 struct command {
     string operation;
-    union {
-        struct { char *regex; } match;
-        struct { char *regex; char *replacement; } replace;
-    } args;
+    string regex;
+    string replacement;
 };
 
 static void processOptions(int argc, char **argv);
@@ -27,14 +25,13 @@ static void parseCommands(int argc, char **argv,
 
 int main(int argc, char **argv) {
     processOptions(argc, argv);
+    cout << "debug mode: " << (debug_mode ? "ON" : "OFF") << endl;
 
     /* optind is the index in argv of the first argv-element that is not
      * an option. argc - optind is the number of elements in argv that are not
      * options. */
     vector<struct command> commands;
     parseCommands(argc - optind, argv + optind, commands);
-
-    cout << "debug mode: " << (debug_mode ? "ON" : "OFF") << endl;
 }
 
 static void processOptions(int argc, char **argv) {
@@ -86,15 +83,30 @@ static void parseCommands(int argc, char **argv,
         if (c.operation == "echo") {
             cout << "echo" << endl;
         } else if (c.operation == "match") {
-            cout << "match" << endl;
+            if (argc < 2) {
+                cerr << "Insufficient arguments for match: "
+                     << c.operation << endl;
+                exit(1);
+            }
+            c.regex = *(++argv);
+            argc--;
+            cout << c.regex << endl;
         } else if (c.operation == "replace") {
-            cout << "replace" << endl;
+            if (argc < 3) {
+                cerr << "Insufficient arguments for replace: "
+                     << c.operation << endl;
+                exit(1);
+            }
+            c.regex = *(++argv);
+            c.replacement = *(++argv);
+            argc -= 2;
+            cout << "regex " << c.regex << " replace " << c.replacement << endl;
         } else {
             cerr << "Unrecognized command: " << c.operation << endl;
             exit(1);
         }
 
-        /* Handle :: */
+        /* Handle the command separator (::) */
         if (argc > 1) {
             argc--;
             string s(*(++argv));
