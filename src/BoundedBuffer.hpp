@@ -7,20 +7,21 @@
 
 /* This buffer is first-in-first-out (FIFO), i.e. the elements will pop out
  * from it in the order they were pushed in. */
-template<typename T>
 class BoundedBuffer {
-    int maxsize;
-    std::list<T> buffer;
+    const unsigned int maxsize;
+    std::list<char*> buffer;
     std::mutex m;
     std::condition_variable full;
     std::condition_variable empty;
 
 public:
     BoundedBuffer();
-    BoundedBuffer(int maxsize);
+    BoundedBuffer(unsigned int maxsize);
 
-    void push(T x);
-    T pop();
+    void push(char* x);
+    char* pop();
+
+private:
     bool isEmpty();
     bool isFull();
 };

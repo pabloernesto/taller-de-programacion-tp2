@@ -1,40 +1,42 @@
 #include "BoundedBuffer.hpp"
 
-template<typename T>
-bool BoundedBuffer<T>::isEmpty() {
-    std::lock_guard<std::mutex> lck{this.m};
-    return (this.buffer.size() == 0);
+using namespace std;
+
+BoundedBuffer::BoundedBuffer() : maxsize(10) {}
+
+BoundedBuffer::BoundedBuffer(unsigned int maxsize) : maxsize(maxsize) {}
+
+bool BoundedBuffer::isEmpty() {
+    return (this->buffer.size() == 0);
 }
 
-template<typename T>
-bool BoundedBuffer<T>::isFull() {
-    std::lock_guard<std::mutex> lck{this.m};
-    return (this.buffer.size() == this.maxsize);
+bool BoundedBuffer::isFull() {
+    return (this->buffer.size() == this->maxsize);
 }
 
-template<typename T>
-void BoundedBuffer<T>::push(T x) {
-    std::lock_guard<std::mutex> lck{this.m};
+void BoundedBuffer::push(char* x) {
+    unique_lock<mutex> lck{this->m};
 
     // Wait until buffer is not full.
-    this.full.wait(lck, !isFull());
+    if (this->isFull())
+        this->full.wait(lck, [this]{return !(this->isFull());});
 
-    this.buffer.push_back();
+    this->buffer.push_back(x);
 
-    this.empty.notify_one();
+    this->empty.notify_one();
 }
 
-template<typename T>
-T BoundedBuffer<T>::pop() {
-    std::lock_guard<std::mutex> lck{this.m};
+char* BoundedBuffer::pop() {
+    unique_lock<mutex> lck{this->m};
 
     // Wait until buffer is not empty.
-    this.empty.wait(lck, !isEmpty());
+    if (this->isEmpty())
+        this->empty.wait(lck, [this]{return !(this->isEmpty());});
 
-    T res = this.buffer.front();
-    this.buffer.pop_front();
+    char* res = this->buffer.front();
+    this->buffer.pop_front();
 
-    this.full.notify_one();
+    this->full.notify_one();
 
     return res;
 }
