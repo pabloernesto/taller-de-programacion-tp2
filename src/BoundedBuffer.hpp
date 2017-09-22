@@ -8,6 +8,7 @@
 /* This buffer is first-in-first-out (FIFO), i.e. the elements will pop out
  * from it in the order they were pushed in. */
 class BoundedBuffer {
+    bool closed;
     const unsigned int maxsize;
     std::list<char*> buffer;
     std::mutex m;
@@ -20,6 +21,7 @@ public:
 
     void push(char* x);
     char* pop();
+    void close();
 
 private:
     bool isEmpty();
