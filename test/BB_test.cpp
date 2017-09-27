@@ -9,8 +9,14 @@ using namespace std;
 int main(int argc, char **argv) {
     StdinWrapper in;
     StdoutWrapper out;
-    Echo e(in, out);
+    BoundedBuffer b;
 
-    thread t{e};
-    t.join();
+    Echo e1(in, b);
+    Echo e2(b, out);
+
+    thread t1{e1};
+    thread t2{e2};
+
+    t1.join();
+    t2.join();
 }
