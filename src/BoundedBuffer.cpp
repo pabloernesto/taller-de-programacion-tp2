@@ -17,6 +17,12 @@ bool BoundedBuffer::isFull() {
 
 bool BoundedBuffer::isAtEnd() {
     unique_lock<mutex> lck{this->m};
+
+    if (!this->isEmpty()) return false;
+
+    if (!this->closed)
+        this->empty.wait(lck, [this]{return !this->isEmpty() || this->closed;});
+
     return (this->isEmpty() && this->closed);
 }
 
