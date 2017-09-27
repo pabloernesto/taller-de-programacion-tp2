@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     parseCommands(argc - optind, argv + optind, commands);
 
     for (auto it = commands.begin(); it != commands.end(); it++) {
-        cout << (*it).operation << endl;
+        cout << it->operation << endl;
     }
 }
 

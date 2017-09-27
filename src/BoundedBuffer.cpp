@@ -15,7 +15,12 @@ bool BoundedBuffer::isFull() {
     return (this->buffer.size() == this->maxsize);
 }
 
-void BoundedBuffer::push(char* x) {
+bool BoundedBuffer::isAtEnd() {
+    unique_lock<mutex> lck{this->m};
+    return (this->isEmpty() && this->closed);
+}
+
+void BoundedBuffer::push(string x) {
     unique_lock<mutex> lck{this->m};
 
     if (this->closed) throw;
@@ -28,16 +33,16 @@ void BoundedBuffer::push(char* x) {
     this->empty.notify_one();
 }
 
-char* BoundedBuffer::pop() {
+string BoundedBuffer::pop() {
     unique_lock<mutex> lck{this->m};
 
     // Wait until buffer is not empty or is closed.
     if (this->isEmpty())
         this->empty.wait(lck, [this]{return this->closed || !this->isEmpty();});
 
-    if (this->isEmpty()) return nullptr;
+    if (this->isEmpty()) throw;
 
-    char* res = this->buffer.front();
+    string res = this->buffer.front();
     this->buffer.pop_front();
 
     this->full.notify_one();
