@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
     StdinWrapper in;
     StdoutWrapper out;
 
-    Match m("hi", in, out);
+    Match m(".*regex.*", in, out);
 
     thread t{m};
     t.join();

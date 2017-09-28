@@ -10,8 +10,7 @@ Match::Match(std::string regex, Source &input, Sink &output)
 void Match::operator()() {
     while (!input.isAtEnd()) {
         string s = input.pop();
-        if (s != "a")
-            output.push(s);
+        if (regex_match(s, r)) output.push(s);
     }
     output.close();
 }
