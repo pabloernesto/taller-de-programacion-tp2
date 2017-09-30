@@ -1,8 +1,17 @@
 #include "SourceSink.hpp"
 #include <regex>
 
-#ifndef MATCH_H
-#define MATCH_H
+#ifndef TASKS_H
+#define TASKS_H
+
+class Echo {
+    Source &input;
+    Sink &output;
+
+public:
+    Echo(Source &input, Sink &output);
+    void operator()();
+};
 
 class Match {
     std::basic_regex<char> r;
