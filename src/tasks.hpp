@@ -4,7 +4,11 @@
 #ifndef TASKS_H
 #define TASKS_H
 
-class Echo {
+class Task {
+    virtual void operator()() = 0;
+};
+
+class Echo : public Task {
     Source &input;
     Sink &output;
 
@@ -13,7 +17,7 @@ public:
     void operator()();
 };
 
-class Match {
+class Match : public Task {
     std::basic_regex<char> r;
     Source &input;
     Sink &output;
