@@ -11,8 +11,8 @@ int main(int argc, char **argv) {
     StdoutWrapper out;
     BoundedBuffer b;
 
-    Echo e1(in, b);
-    Echo e2(b, out);
+    Echo e1(&in, &b);
+    Echo e2(&b, &out);
 
     thread t1{e1};
     thread t2{e2};

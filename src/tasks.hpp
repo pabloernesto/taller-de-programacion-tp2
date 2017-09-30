@@ -9,21 +9,25 @@ class Task {
 };
 
 class Echo : public Task {
-    Source &input;
-    Sink &output;
+    Source *input;
+    Sink *output;
 
 public:
-    Echo(Source &input, Sink &output);
+    Echo(Source *input, Sink *output);
+    void setInput(Source *input);
+    void setOutput(Sink *output);
     void operator()();
 };
 
 class Match : public Task {
     std::basic_regex<char> r;
-    Source &input;
-    Sink &output;
+    Source *input;
+    Sink *output;
 
 public:
-    Match(std::string regex, Source &input, Sink &output);
+    Match(std::string regex, Source *input, Sink *output);
+    void setInput(Source *input);
+    void setOutput(Sink *output);
     void operator()();
 };
 

@@ -4,14 +4,21 @@
 
 using namespace std;
 
-Match::Match(std::string regex, Source &input, Sink &output)
+Match::Match(std::string regex, Source *input, Sink *output)
         : r(regex), input(input), output(output) {}
 
 void Match::operator()() {
-    while (!input.isAtEnd()) {
-        string s = input.pop();
-        if (regex_search(s, r)) output.push(s);
+    while (!input->isAtEnd()) {
+        string s = input->pop();
+        if (regex_search(s, r)) output->push(s);
     }
-    output.close();
+    output->close();
 }
 
+void Match::setInput(Source *input) {
+    this->input = input;
+}
+
+void Match::setOutput(Sink *output) {
+    this->output = output;
+}
