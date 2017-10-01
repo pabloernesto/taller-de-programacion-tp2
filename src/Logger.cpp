@@ -21,6 +21,8 @@ void Logger::print() {
 
 void Logger::clear() {
     unique_lock<mutex> lck{Logger::m};
+    for (unsigned int i = 0; i < Logger::logs.size(); i++)
+        delete Logger::logs[i];
     Logger::logs.clear();
 }
 
