@@ -3,20 +3,20 @@
 
 using namespace std;
 
-std::vector<Log> Logger::logs;
+vector<Log*> Logger::logs;
+mutex Logger::m;
 
-Sink& Logger::requestLog(string name) {
+Sink* Logger::requestLog(string name) {
     unique_lock<mutex> lck{Logger::m};
     //posfix the name
-    Log l{name};
-    Logger::logs.push_back(l);
+    Logger::logs.push_back(new Log(name));
     return logs.back();
 }
 
 void Logger::print() {
     unique_lock<mutex> lck{Logger::m};
     for (unsigned int i = 0; i < Logger::logs.size(); i++)
-        Logger::logs[i].print();
+        Logger::logs[i]->print();
 }
 
 void Logger::clear() {

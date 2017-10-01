@@ -19,10 +19,10 @@ public:
 };
 
 class Logger {
-    static std::vector<Log> logs;
+    static std::vector<Log*> logs;
     static std::mutex m;
 public:
-    static Sink& requestLog(std::string name);
+    static Sink* requestLog(std::string name);
     static void print();
     static void clear();
 };
