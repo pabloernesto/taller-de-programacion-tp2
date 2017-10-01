@@ -12,10 +12,9 @@
 #include "BoundedBuffer.hpp"
 #include "iowrappers.hpp"
 #include "tasks.hpp"
+#include "Logger.hpp"
 
 using namespace std;
-
-int debug_mode = 0;
 
 struct command {
     string operation;
@@ -27,6 +26,8 @@ static void processOptions(int argc, char **argv);
 static void printUsage();
 static void parseCommands(int argc, char **argv,
                           vector<struct command> &output);
+
+static int debug_mode = 0;
 
 int main(int argc, char **argv) {
     processOptions(argc, argv);
@@ -75,6 +76,9 @@ int main(int argc, char **argv) {
 
     for (unsigned int i = 0; i < tasks.size(); i++) threads[i].join();
     while (tasks.size() != 0) { delete tasks.back(); tasks.pop_back(); }
+
+    if (debug_mode) Logger::print();
+    Logger::clear();
 }
 
 static void processOptions(int argc, char **argv) {

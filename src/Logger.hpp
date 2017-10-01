@@ -9,7 +9,6 @@
 class Log : public Sink {
     std::string name;
     std::vector<std::string> messages;
-    bool closed;
     std::mutex m;
 public:
     Log(std::string name);

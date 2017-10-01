@@ -26,21 +26,17 @@ void Logger::clear() {
     Logger::logs.clear();
 }
 
-Log::Log(string name) : name(name), messages(), closed(false), m() {}
+Log::Log(string name) : name(name), messages(), m() {}
+
+void Log::close() {}
 
 void Log::push(string x) {
     unique_lock<mutex> lck{this->m};
-    if (this->closed) throw;
     this->messages.push_back(x);
-}
-
-void Log::close() {
-    unique_lock<mutex> lck{this->m};
-    this->closed = true;
 }
 
 void Log::print() {
     unique_lock<mutex> lck{this->m};
     for (unsigned int i = 0; i < this->messages.size(); i++)
-        cerr << this->messages[i];
+        cerr << this->messages[i] << endl;
 }
