@@ -13,9 +13,8 @@ Echo::~Echo() {}
 
 void Echo::operator()() {
     Sink *log = Logger::requestLog("echo");
-    while (true) {
+    while (!input->isAtEnd()) {
         string s = input->pop();
-        if (input->isAtEnd()) break;
         log->push(s + " -> " + s);
         output->push(s);
     }
