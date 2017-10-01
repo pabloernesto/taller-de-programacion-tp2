@@ -11,7 +11,7 @@ string StdinWrapper::pop() {
 }
 
 bool StdinWrapper::isAtEnd() {
-    return cin.eof();
+    return cin.peek() == EOF;
 }
 
 void StdoutWrapper::push(string x) {
