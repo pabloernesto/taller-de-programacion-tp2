@@ -8,7 +8,6 @@
 #include <string>
 #include <iostream>
 #include <thread>
-#include <algorithm>
 
 #include "BoundedBuffer.hpp"
 #include "iowrappers.hpp"
