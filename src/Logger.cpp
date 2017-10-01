@@ -15,8 +15,10 @@ Sink* Logger::requestLog(string name) {
 
 void Logger::print() {
     unique_lock<mutex> lck{Logger::m};
-    for (unsigned int i = 0; i < Logger::logs.size(); i++)
+    for (unsigned int i = 0; i < Logger::logs.size(); i++) {
+        cerr << "(" << i + 1 << ") ";
         Logger::logs[i]->print();
+    }
 }
 
 void Logger::clear() {
@@ -37,6 +39,8 @@ void Log::push(string x) {
 
 void Log::print() {
     unique_lock<mutex> lck{this->m};
+    cerr << this->name << endl;
     for (unsigned int i = 0; i < this->messages.size(); i++)
         cerr << this->messages[i] << endl;
+    cerr << endl;
 }
