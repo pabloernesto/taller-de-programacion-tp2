@@ -67,6 +67,10 @@ int main(int argc, char **argv) {
             tasks.push_back(t);
             threads.emplace_back(*t);
         } else if (commands[i].operation == "replace") {
+            Replace *t = new Replace(commands[i].regex, commands[i].replacement,
+                                     source, sink);
+            tasks.push_back(t);
+            threads.emplace_back(*t);
         }
     }
 
