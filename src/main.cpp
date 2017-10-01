@@ -7,6 +7,12 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <thread>
+#include <algorithm>
+
+#include "BoundedBuffer.hpp"
+#include "iowrappers.hpp"
+#include "tasks.hpp"
 
 using namespace std;
 
@@ -33,9 +39,32 @@ int main(int argc, char **argv) {
     vector<struct command> commands;
     parseCommands(argc - optind, argv + optind, commands);
 
-    for (auto it = commands.begin(); it != commands.end(); it++) {
-        cout << it->operation << endl;
+    // If there are no commands, fail.
+    if (commands.size() == 0) return 1;
+
+    vector<BoundedBuffer> buffers(commands.size() - 1);
+    vector<Task*> tasks;
+
+    StdinWrapper in;
+    StdoutWrapper out;
+
+    for (unsigned int i = 0; i < commands.size(); i++) {
+        Source *source;
+        if (i == 0) source = &in;
+        else source = &(buffers[i - 1]);
+
+        Sink *sink;
+        if (i == (commands.size() - 1)) sink = &out;
+        else sink = &(buffers[i]);
+
+        if (commands[i].operation == "echo") {
+            tasks.push_back(new Echo(source, sink));
+        } else if (commands[i].operation == "match") {
+            tasks.push_back(new Match(commands[i].regex, source, sink));
+        } else if (commands[i].operation == "replace") {
+        }
     }
+    while (tasks.size() != 0) { delete tasks.back(); tasks.pop_back(); }
 }
 
 static void processOptions(int argc, char **argv) {

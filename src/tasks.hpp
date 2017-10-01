@@ -5,6 +5,8 @@
 #define TASKS_H
 
 class Task {
+public:
+    virtual ~Task();
     virtual void operator()() = 0;
 };
 
@@ -14,8 +16,7 @@ class Echo : public Task {
 
 public:
     Echo(Source *input, Sink *output);
-    void setInput(Source *input);
-    void setOutput(Sink *output);
+    ~Echo();
     void operator()();
 };
 
@@ -26,8 +27,7 @@ class Match : public Task {
 
 public:
     Match(std::string regex, Source *input, Sink *output);
-    void setInput(Source *input);
-    void setOutput(Sink *output);
+    ~Match();
     void operator()();
 };
 
