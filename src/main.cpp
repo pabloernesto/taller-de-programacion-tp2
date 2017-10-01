@@ -74,12 +74,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    for (unsigned int i = 0; i < tasks.size(); i++)
-        threads[i].join();
-
-    cout << "tasks.size(): " << tasks.size() << endl;
+    for (unsigned int i = 0; i < tasks.size(); i++) threads[i].join();
     while (tasks.size() != 0) { delete tasks.back(); tasks.pop_back(); }
-    cout << "goodbye" << endl;
 }
 
 static void processOptions(int argc, char **argv) {
