@@ -31,5 +31,17 @@ public:
     void operator()();
 };
 
+class Replace : public Task {
+    std::basic_regex<char> r;
+    std::string replacement;
+    Source *input;
+    Sink *output;
+
+public:
+    Replace(std::string regex, std::string rep, Source *input, Sink *output);
+    ~Replace();
+    void operator()();
+};
+
 #endif
 
