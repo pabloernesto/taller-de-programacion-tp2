@@ -44,6 +44,7 @@ int main(int argc, char **argv) {
 
     vector<BoundedBuffer> buffers(commands.size() - 1);
     vector<Task*> tasks;
+    vector<std::thread> threads;
 
     StdinWrapper in;
     StdoutWrapper out;
@@ -58,13 +59,23 @@ int main(int argc, char **argv) {
         else sink = &(buffers[i]);
 
         if (commands[i].operation == "echo") {
-            tasks.push_back(new Echo(source, sink));
+            Echo *t = new Echo(source, sink);
+            tasks.push_back(t);
+            threads.emplace_back(*t);
         } else if (commands[i].operation == "match") {
-            tasks.push_back(new Match(commands[i].regex, source, sink));
+            Match *t = new Match(commands[i].regex, source, sink);
+            tasks.push_back(t);
+            threads.emplace_back(*t);
         } else if (commands[i].operation == "replace") {
         }
     }
+
+    for (unsigned int i = 0; i < tasks.size(); i++)
+        threads[i].join();
+
+    cout << "tasks.size(): " << tasks.size() << endl;
     while (tasks.size() != 0) { delete tasks.back(); tasks.pop_back(); }
+    cout << "goodbye" << endl;
 }
 
 static void processOptions(int argc, char **argv) {
