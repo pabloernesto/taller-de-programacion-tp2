@@ -8,8 +8,12 @@ mutex Logger::m;
 
 Sink* Logger::requestLog(string name) {
     unique_lock<mutex> lck{Logger::m};
-    //posfix the name
-    Logger::logs.push_back(new Log(name));
+
+    int n = 1;
+    for (unsigned int i = 0; i < Logger::logs.size(); i++)
+        if (Logger::logs[i]->getName() == name + to_string(n)) n++;
+
+    Logger::logs.push_back(new Log(name + to_string(n)));
     return logs.back();
 }
 
@@ -43,4 +47,8 @@ void Log::print() {
     for (unsigned int i = 0; i < this->messages.size(); i++)
         cerr << this->messages[i] << endl;
     cerr << endl;
+}
+
+std::string Log::getName() {
+    return this->name;
 }

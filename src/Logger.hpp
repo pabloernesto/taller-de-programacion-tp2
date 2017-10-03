@@ -15,6 +15,7 @@ public:
     void push(std::string x);
     void close();
     void print();
+    std::string getName();
 };
 
 class Logger {
