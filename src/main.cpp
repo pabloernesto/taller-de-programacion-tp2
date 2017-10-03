@@ -31,7 +31,6 @@ static int debug_mode = 0;
 
 int main(int argc, char **argv) {
     processOptions(argc, argv);
-    cout << "debug mode: " << (debug_mode ? "ON" : "OFF") << endl;
 
     /* optind is the index in argv of the first argv-element that is not
      * an option. argc - optind is the number of elements in argv that are not
