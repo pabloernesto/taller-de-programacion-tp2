@@ -2,7 +2,7 @@
 #include <mutex>
 #include <string>
 #include <condition_variable>
-#include "SourceSink.hpp"
+#include "SourceSink.h"
 
 #ifndef BOUNDED_BUFFER_H
 #define BOUNDED_BUFFER_H

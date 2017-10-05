@@ -1,4 +1,5 @@
-#include "BoundedBuffer.hpp"
+#include "BoundedBuffer.h"
+#include <string>
 
 using namespace std;
 

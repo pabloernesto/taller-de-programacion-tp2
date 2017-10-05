@@ -1,5 +1,7 @@
-#include "Logger.hpp"
+#include "Logger.h"
 #include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -19,7 +21,11 @@ Sink* Logger::requestLog(string name) {
 
 void Logger::print() {
     unique_lock<mutex> lck{Logger::m};
-    for (unsigned int i = 0; i < Logger::logs.size(); i++) {
+
+    cerr << "(" << 1 << ") ";
+    Logger::logs[0]->print();
+    for (unsigned int i = 1; i < Logger::logs.size(); i++) {
+        cerr << endl;
         cerr << "(" << i + 1 << ") ";
         Logger::logs[i]->print();
     }
@@ -46,7 +52,6 @@ void Log::print() {
     cerr << this->name << endl;
     for (unsigned int i = 0; i < this->messages.size(); i++)
         cerr << this->messages[i] << endl;
-    cerr << endl;
 }
 
 std::string Log::getName() {

@@ -1,6 +1,6 @@
-#include "tasks.hpp"
-#include "SourceSink.hpp"
-#include "Logger.hpp"
+#include "tasks.h"
+#include "SourceSink.h"
+#include "Logger.h"
 
 #include <string>
 #include <regex>

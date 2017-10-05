@@ -1,5 +1,5 @@
-#include "tasks.hpp"
-#include "Logger.hpp"
+#include "tasks.h"
+#include "Logger.h"
 #include <string>
 
 using namespace std;

@@ -9,10 +9,10 @@
 #include <iostream>
 #include <thread>
 
-#include "BoundedBuffer.hpp"
-#include "iowrappers.hpp"
-#include "tasks.hpp"
-#include "Logger.hpp"
+#include "BoundedBuffer.h"
+#include "iowrappers.h"
+#include "tasks.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -51,11 +51,13 @@ int main(int argc, char **argv) {
     for (unsigned int i = 0; i < commands.size(); i++) {
         Source *source;
         if (i == 0) source = &in;
-        else source = &(buffers[i - 1]);
+        else
+            source = &(buffers[i - 1]);
 
         Sink *sink;
         if (i == (commands.size() - 1)) sink = &out;
-        else sink = &(buffers[i]);
+        else
+            sink = &(buffers[i]);
 
         if (commands[i].operation == "echo") {
             Echo *t = new Echo(source, sink);

@@ -1,7 +1,7 @@
 /* This classes wrap standard input and output facilities with Source and Sink
  * interfaces. */
 
-#include "SourceSink.hpp"
+#include "SourceSink.h"
 #include <string>
 
 #ifndef IOWRAP_H

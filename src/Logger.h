@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include <mutex>
-#include "SourceSink.hpp"
+#include "SourceSink.h"
 
 #ifndef LOGGER_H
 #define LOGGER_H
