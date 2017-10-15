@@ -38,7 +38,6 @@ int main(int argc, char **argv) {
     if (commands.size() == 0) return 1;
 
     vector<BoundedBuffer> buffers(commands.size() - 1);
-    vector<Task*> tasks;
     vector<std::thread> threads;
 
     StdinWrapper in;
@@ -56,23 +55,18 @@ int main(int argc, char **argv) {
             sink = &(buffers[i]);
 
         if (commands[i].operation == "echo") {
-            Echo *t = new Echo(source, sink);
-            tasks.push_back(t);
-            threads.emplace_back(*t);
+            Echo t(source, sink);
+            threads.emplace_back(std::move(t));
         } else if (commands[i].operation == "match") {
-            Match *t = new Match(commands[i].regex, source, sink);
-            tasks.push_back(t);
-            threads.emplace_back(*t);
+            Match t(commands[i].regex, source, sink);
+            threads.emplace_back(std::move(t));
         } else if (commands[i].operation == "replace") {
-            Replace *t = new Replace(commands[i].regex, commands[i].replacement,
-                                     source, sink);
-            tasks.push_back(t);
-            threads.emplace_back(*t);
+            Replace t(commands[i].regex, commands[i].replacement, source, sink);
+            threads.emplace_back(std::move(t));
         }
     }
 
-    for (unsigned int i = 0; i < tasks.size(); i++) threads[i].join();
-    while (tasks.size() != 0) { delete tasks.back(); tasks.pop_back(); }
+    for (unsigned int i = 0; i < threads.size(); i++) threads[i].join();
 
     if (debug_mode) Logger::print();
     Logger::clear();
