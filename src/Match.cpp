@@ -8,8 +8,6 @@ using namespace std;
 Match::Match(std::string regex, Source *input, Sink *output)
         : r(regex), input(input), output(output) {}
 
-Match::~Match() {}
-
 void Match::operator()() {
     Sink *log = Logger::requestLog("match");
     while (!input->isAtEnd()) {

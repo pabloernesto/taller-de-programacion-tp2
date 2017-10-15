@@ -61,7 +61,8 @@ int main(int argc, char **argv) {
             Match t(commands[i].regex, source, sink);
             threads.emplace_back(std::move(t));
         } else if (commands[i].operation == "replace") {
-            Replace t(commands[i].regex, commands[i].replacement, source, sink);
+            Replace t(std::move(commands[i].regex),
+                    std::move(commands[i].replacement), source, sink);
             threads.emplace_back(std::move(t));
         }
     }

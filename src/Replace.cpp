@@ -7,10 +7,9 @@
 
 using namespace std;
 
-Replace::Replace(string regex, string rep, Source *input, Sink *output)
-        : r(regex), replacement(rep), input(input), output(output) {}
-
-Replace::~Replace() {}
+Replace::Replace(string &&regex, string &&rep, Source *input, Sink *output)
+        : r(std::move(regex)), replacement(std::move(rep)), input(input),
+          output(output) {}
 
 void Replace::operator()() {
     Sink *log = Logger::requestLog("replace");

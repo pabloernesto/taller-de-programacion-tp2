@@ -9,8 +9,6 @@ Echo::Echo(Source *input, Sink *output) {
     this->output = output;
 }
 
-Echo::~Echo() {}
-
 void Echo::operator()() {
     Sink *log = Logger::requestLog("echo");
     while (!input->isAtEnd()) {

@@ -10,7 +10,6 @@ class Echo {
 
     public:
     Echo(Source *input, Sink *output);
-    ~Echo();
     void operator()();
 };
 
@@ -21,7 +20,6 @@ class Match {
 
     public:
     Match(std::string regex, Source *input, Sink *output);
-    ~Match();
     void operator()();
 };
 
@@ -32,8 +30,8 @@ class Replace {
     Sink *output;
 
     public:
-    Replace(std::string regex, std::string rep, Source *input, Sink *output);
-    ~Replace();
+    Replace(std::string &&regex, std::string &&rep,
+            Source *input, Sink *output);
     void operator()();
 };
 

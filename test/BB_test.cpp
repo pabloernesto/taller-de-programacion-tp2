@@ -1,6 +1,6 @@
-#include "BoundedBuffer.hpp"
-#include "tasks.hpp"
-#include "iowrappers.hpp"
+#include "BoundedBuffer.h"
+#include "tasks.h"
+#include "iowrappers.h"
 #include <iostream>
 #include <thread>
 

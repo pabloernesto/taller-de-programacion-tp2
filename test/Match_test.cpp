@@ -1,5 +1,5 @@
-#include "tasks.hpp"
-#include "iowrappers.hpp"
+#include "tasks.h"
+#include "iowrappers.h"
 #include <thread>
 
 using namespace std;
