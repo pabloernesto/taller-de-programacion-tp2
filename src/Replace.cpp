@@ -7,8 +7,8 @@
 
 using namespace std;
 
-Replace::Replace(string &&regex, string &&rep, Source *input, Sink *output)
-        : r(std::move(regex)), replacement(std::move(rep)), input(input),
+Replace::Replace(string regex, string &&rep, Source *input, Sink *output)
+        : r(regex), replacement(std::move(rep)), input(input),
           output(output) {}
 
 void Replace::operator()() {

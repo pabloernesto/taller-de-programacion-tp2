@@ -30,8 +30,7 @@ class Replace {
     Sink *output;
 
     public:
-    Replace(std::string &&regex, std::string &&rep,
-            Source *input, Sink *output);
+    Replace(std::string regex, std::string &&rep, Source *input, Sink *output);
     void operator()();
 };
 
