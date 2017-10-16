@@ -21,7 +21,7 @@ public:
     BoundedBuffer();
     BoundedBuffer(unsigned int maxsize);
 
-    void push(std::string x);
+    void push(const std::string &x);
     void close();
 
     std::string pop();

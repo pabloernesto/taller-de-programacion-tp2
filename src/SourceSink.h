@@ -13,7 +13,7 @@ public:
 class Sink {
 public:
     virtual ~Sink() {};
-    virtual void push(std::string x) = 0;
+    virtual void push(const std::string &x) = 0;
     virtual void close() = 0;
 };
 

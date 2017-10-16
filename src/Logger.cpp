@@ -42,7 +42,7 @@ Log::Log(string name) : name(name), messages(), m() {}
 
 void Log::close() {}
 
-void Log::push(string x) {
+void Log::push(const string &x) {
     unique_lock<mutex> lck{this->m};
     this->messages.push_back(x);
 }

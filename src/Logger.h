@@ -12,7 +12,7 @@ class Log : public Sink {
     std::mutex m;
 public:
     Log(std::string name);
-    void push(std::string x);
+    void push(const std::string &x);
     void close();
     void print();
     std::string getName();

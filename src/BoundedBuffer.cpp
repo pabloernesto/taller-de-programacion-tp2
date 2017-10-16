@@ -27,7 +27,7 @@ bool BoundedBuffer::isAtEnd() {
     return (this->isEmpty() && this->closed);
 }
 
-void BoundedBuffer::push(string x) {
+void BoundedBuffer::push(const string &x) {
     unique_lock<mutex> lck{this->m};
 
     if (this->closed) throw;

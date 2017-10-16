@@ -15,7 +15,7 @@ public:
 
 class StdoutWrapper : public Sink {
 public:
-    void push(std::string x);
+    void push(const std::string &x);
     void close();
 };
 

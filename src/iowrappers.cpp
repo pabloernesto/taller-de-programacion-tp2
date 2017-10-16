@@ -14,7 +14,7 @@ bool StdinWrapper::isAtEnd() {
     return cin.peek() == EOF;
 }
 
-void StdoutWrapper::push(string x) {
+void StdoutWrapper::push(const string &x) {
     cout << x << endl;
 }
 
