@@ -5,37 +5,36 @@
 
 using namespace std;
 
-vector<Log*> Logger::logs;
-mutex Logger::m;
-
-Sink* Logger::requestLog(string name) {
-    unique_lock<mutex> lck{Logger::m};
+Log* Logger::requestLog(const string &name) {
+    unique_lock<mutex> lck(m);
 
     int n = 1;
-    for (unsigned int i = 0; i < Logger::logs.size(); i++)
-        if (Logger::logs[i]->getName() == name + to_string(n)) n++;
+    for (unsigned int i = 0; i < logs.size(); i++)
+        if (logs[i]->getName() == name + to_string(n)) n++;
 
-    Logger::logs.push_back(new Log(name + to_string(n)));
+    logs.push_back(new Log(name + to_string(n)));
     return logs.back();
 }
 
 void Logger::print() {
-    unique_lock<mutex> lck{Logger::m};
+    unique_lock<mutex> lck(m);
+
+    if (logs.size() == 0) return;
 
     cerr << "(" << 1 << ") ";
-    Logger::logs[0]->print();
-    for (unsigned int i = 1; i < Logger::logs.size(); i++) {
+    logs[0]->print();
+    for (unsigned int i = 1; i < logs.size(); i++) {
         cerr << endl;
         cerr << "(" << i + 1 << ") ";
-        Logger::logs[i]->print();
+        logs[i]->print();
     }
 }
 
 void Logger::clear() {
-    unique_lock<mutex> lck{Logger::m};
-    for (unsigned int i = 0; i < Logger::logs.size(); i++)
-        delete Logger::logs[i];
-    Logger::logs.clear();
+    unique_lock<mutex> lck(m);
+    for (unsigned int i = 0; i < logs.size(); i++)
+        delete logs[i];
+    logs.clear();
 }
 
 Log::Log(string name) : name(name), messages(), m() {}

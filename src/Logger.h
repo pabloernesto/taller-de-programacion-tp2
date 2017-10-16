@@ -19,12 +19,13 @@ public:
 };
 
 class Logger {
-    static std::vector<Log*> logs;
-    static std::mutex m;
-public:
-    static Sink* requestLog(std::string name);
-    static void print();
-    static void clear();
+    std::vector<Log*> logs;
+    std::mutex m;
+
+    public:
+    Log* requestLog(const std::string &name);
+    void print();
+    void clear();
 };
 
 #endif

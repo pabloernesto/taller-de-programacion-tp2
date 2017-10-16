@@ -6,10 +6,12 @@
 using namespace std;
 
 Match::Match(std::string regex, Source *input, Sink *output)
-        : r(regex), input(input), output(output) {}
+        : Match(regex, input, output, nullptr) {}
+
+Match::Match(std::string regex, Source *input, Sink *output, Log *log)
+        : r(regex), input(input), output(output), log(log) {}
 
 void Match::operator()() {
-    Sink *log = Logger::requestLog("match");
     while (!input->isAtEnd()) {
         string s = input->pop();
         string message = s + " -> ";
@@ -19,7 +21,8 @@ void Match::operator()() {
         } else {
             message += "(Filtrado)";
         }
-        log->push(message);
+        if (log) log->push(message);
     }
     output->close();
+    if (log) log->close();
 }

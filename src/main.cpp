@@ -43,6 +43,8 @@ int main(int argc, char **argv) {
     StdinWrapper in;
     StdoutWrapper out;
 
+    Logger log_factory;
+
     for (unsigned int i = 0; i < commands.size(); i++) {
         Source *source;
         if (i == 0) source = &in;
@@ -55,22 +57,34 @@ int main(int argc, char **argv) {
             sink = &(buffers[i]);
 
         if (commands[i].operation == "echo") {
-            Echo t(source, sink);
+            Log *log = nullptr;
+            if (debug_mode) log = log_factory.requestLog("echo");
+
+            Echo t(source, sink, log);
+
             threads.emplace_back(std::move(t));
         } else if (commands[i].operation == "match") {
-            Match t(commands[i].regex, source, sink);
+            Log *log = nullptr;
+            if (debug_mode) log = log_factory.requestLog("match");
+
+            Match t(commands[i].regex, source, sink, log);
+
             threads.emplace_back(std::move(t));
         } else if (commands[i].operation == "replace") {
+            Log *log = nullptr;
+            if (debug_mode) log = log_factory.requestLog("replace");
+
             Replace t(commands[i].regex, std::move(commands[i].replacement),
-                    source, sink);
+                    source, sink, log);
+
             threads.emplace_back(std::move(t));
         }
     }
 
     for (unsigned int i = 0; i < threads.size(); i++) threads[i].join();
 
-    if (debug_mode) Logger::print();
-    Logger::clear();
+    log_factory.print();
+    log_factory.clear();
 }
 
 static void processOptions(int argc, char **argv) {

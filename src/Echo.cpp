@@ -4,18 +4,17 @@
 
 using namespace std;
 
-Echo::Echo(Source *input, Sink *output) {
-    this->input = input;
-    this->output = output;
-}
+Echo::Echo(Source *input, Sink *output) : Echo(input, output, nullptr) {}
+
+Echo::Echo(Source *input, Sink *output, Log *log)
+        : input(input), output(output), log(log) {}
 
 void Echo::operator()() {
-    Sink *log = Logger::requestLog("echo");
     while (!input->isAtEnd()) {
         string s = input->pop();
-        log->push(s + " -> " + s);
+        if (log) log->push(s + " -> " + s);
         output->push(s);
     }
     output->close();
-    log->close();
+    if (log) log->close();
 }
